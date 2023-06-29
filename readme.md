@@ -28,7 +28,7 @@ Retrieve information about a brand item.
 - **Request Body**:
 ```js
 {
-    "sort":"asc",
+    "sort":"asc", //[asc,desc]
     "filter": "",
     "brand": "fakeStore",
     "page": 1,
@@ -85,7 +85,7 @@ Retrieve a list of all orders.
 - **Request Body**:
 ```js
 {
-    "sort":"",
+    "sort":"", //[asc,desc]
     "page": 1,
     "per_page": 2
 }
