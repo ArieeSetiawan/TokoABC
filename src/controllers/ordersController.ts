@@ -10,13 +10,6 @@ interface GetOrdersRequestBody {
     per_page: number
 }
 
-const supplierAPI : { [key: string]: string } = {
-    default: 'https://fakestoreapi.com/products',
-    fakeStore: 'https://fakestoreapi.com/products',
-    brandA: 'https://brandA.com',
-    brandB: 'https://brandB.com',
-  }
-
 export const createOrder = async (req: Request, res: Response) => {
   try {
     const {
@@ -28,11 +21,22 @@ export const createOrder = async (req: Request, res: Response) => {
         created_by
       }: order = req.body
 
-    const supplierURL = supplierAPI[brand || 'default']
-    if(!supplierURL){
+    const shop = await prisma.supplier.findFirst({
+        where:{
+          nama: brand
+        }
+      })
+  
+      if(!shop){
         res.status(404).json({error: "Store Not Found"})
-        return
-    }
+          return
+      }
+      
+      const supplierURL = shop.url
+      if(!supplierURL){
+          res.status(404).json({error: "URL is Empty"})
+          return
+      }
     let url = `${supplierURL}/${item_id}`
 
     let item = await axios.get(url)

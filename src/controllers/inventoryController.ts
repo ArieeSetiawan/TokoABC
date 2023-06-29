@@ -1,13 +1,8 @@
 import { Request, Response } from 'express'
+import { PrismaClient } from '@prisma/client'
 import axios from 'axios'
 import paginate from '../lib/paginate'
-
-const supplierAPI : { [key: string]: string } = {
-    default: 'https://fakestoreapi.com/products',
-    fakeStore: 'https://fakestoreapi.com/products',
-    brandA: 'https://brandA.com',
-    brandB: 'https://brandB.com',
-  }
+const prisma = new PrismaClient()
 
 interface GetInventoryRequestBody {
     sort?: string
@@ -20,14 +15,24 @@ interface GetInventoryRequestBody {
 export const getInventory = async (req: Request, res: Response) => {
   try {
     const { sort, filter, brand, page, per_page }: GetInventoryRequestBody = req.body
-    const supplierURL = supplierAPI[brand || 'default']
-    if(!supplierURL){
-        res.status(404).json({error: "Store Not Found"})
+    const shop = await prisma.supplier.findFirst({
+      where:{
+        nama: brand
+      }
+    })
+
+    if(!shop){
+      res.status(404).json({error: "Store Not Found"})
         return
     }
-    let url = `${supplierURL}`
+    
+    const supplierURL = shop.url
+    if(!supplierURL){
+        res.status(404).json({error: "URL is Empty"})
+        return
+    }
 
-    const response = await axios.get(url)
+    const response = await axios.get(supplierURL)
     let data = response.data
 
     if (filter) {

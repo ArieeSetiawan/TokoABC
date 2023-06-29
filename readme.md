@@ -10,8 +10,14 @@ To set up the TokoABC project locally, follow these steps:
 2. Install the project dependencies: Use -npm install
 3. Configure the environment variables. Create a `.env` file in the project root directory and specify the following variables based on .env.example
 4. Run prisma use : -npx prisma generate
-5. Build & Start the server: npm run build and then npm start
-6. The API server should now be running locally on `http://localhost:3000`.
+5. Create Database in mysql and then run migration use : -npx prisma migrate dev
+6. Build & Start the server: npm run build and then npm start
+7. The API server should now be running locally on `http://localhost:3000`.
+8. Because we are using API from fakeStore, please kindly run this query on database
+```js
+INSERT INTO supplier (nama, url)
+VALUES ('fakeStore', 'https://fakestoreapi.com/products');
+```
 
 ## Endpoints
 

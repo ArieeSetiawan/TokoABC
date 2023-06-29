@@ -10,6 +10,11 @@ datasource db {
   provider = "mysql"
   url      = env("DB_MYSQL_URL")
 }
+model supplier{
+  supplier_id     Int           @id @default(autoincrement()) @db.UnsignedInt
+  nama        String?      @db.VarChar(50)
+  url         String?    @db.VarChar(255)
+}
 
 model order{
   order_id     Int           @id @default(autoincrement()) @db.UnsignedInt
