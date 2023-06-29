@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["filterJson"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DB_MYSQL_URL")
+}
+
+model order{
+  order_id     Int           @id @default(autoincrement()) @db.UnsignedInt
+  nama_pemesan String?      @db.VarChar(50)
+  alamat_pemesan String?    @db.VarChar(255)
+  item_id      Int?          @db.UnsignedInt
+  quantity     Int          @db.UnsignedInt
+  total_price  Float?          @db.Float
+  brand        String?      @db.VarChar(50)
+  created_at DateTime  @default(now())
+  created_by String?   @db.VarChar(36)
+  updated_at DateTime  @updatedAt
+  updated_by String?   @db.VarChar(36)
+  deleted_at DateTime? @db.DateTime
+  deleted_by String?   @db.VarChar(36)
+}
